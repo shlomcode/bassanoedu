@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sondaggio - Crescere con il patrimonio di Bassano</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #1e3a5f 0%, #2c5c7a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .poll-container {
+            padding: 30px;
+        }
+        
+        .poll-question {
+            font-size: 1.4rem;
+            color: #1e3a5f;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .poll-option {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid #eaeaea;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .poll-option:hover {
+            border-color: #2c5c7a;
+            background: #f5f7fa;
+            transform: translateY(-2px);
+        }
+        
+        .poll-option.selected {
+            border-color: #1e3a5f;
+            background: #eef5fc;
+            box-shadow: 0 5px 15px rgba(28, 92, 122, 0.15);
+        }
+        
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5c7a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .option-text {
+            font-size: 1.1rem;
+            color: #2c5c7a;
+            font-weight: 500;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5c7a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(28, 92, 122, 0.2);
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #2c5c7a 0%, #3a7d99 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(28, 92, 122, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .thank-you-message {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .thank-you-message i {
+            font-size: 60px;
+            color: #2c5c7a;
+            margin-bottom: 20px;
+        }
+        
+        .thank-you-message h2 {
+            font-size: 2rem;
+            color: #1e3a5f;
+            margin-bottom: 15px;
+        }
+        
+        .thank-you-message p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        
+        .results-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #f0f5f9;
+            color: #2c5c7a;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .results-link:hover {
+            background: #e0ebf3;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #2c5c7a;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .poll-question {
+                font-size: 1.2rem;
+            }
+            
+            .option-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                margin-right: 15px;
+            }
+            
+            .option-text {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .poll-container {
+                padding: 20px;
+            }
+            
+            .poll-option {
+                padding: 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .option-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bassano Edu</h1>
+            <p>Crescere con il patrimonio di Bassano</p>
+        </div>
+        
+        <div class="poll-container" id="poll-container">
+            <div class="poll-question">
+                Secondo te, quale dimensione è più decisiva per rendere il patrimonio culturale uno strumento educativo e di cittadinanza attiva?
+            </div>
+            
+            <div class="poll-options">
+                <div class="poll-option" data-value="sostenibilità">
+                    <div class="option-icon">🌱</div>
+                    <div class="option-text">Sostenibilità – cura e tutela responsabile dei beni culturali</div>
+                </div>
+                
+                <div class="poll-option" data-value="innovazione">
+                    <div class="option-icon">💡</div>
+                    <div class="option-text">Innovazione – metodologie e linguaggi nuovi per raccontare la storia</div>
+                </div>
+                
+                <div class="poll-option" data-value="partecipazione">
+                    <div class="option-icon">🤝</div>
+                    <div class="option-text">Partecipazione – collaborazione tra scuole, istituzioni e comunità</div>
+                </div>
+                
+                <div class="poll-option" data-value="identità">
+                    <div class="option-icon">🏛</div>
+                    <div class="option-text">Identità – riscoperta delle radici e valorizzazione del territorio</div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" id="submit-btn" disabled>Invia la tua risposta</button>
+        </div>
+        
+        <div class="thank-you-message" id="thank-you-message">
+            <i class="fas fa-check-circle"></i>
+            <h2>Grazie per aver partecipato!</h2>
+            <p>La tua risposta è stata registrata. Il tuo contributo è importante per noi.</p>
+            <a href="#" class="results-link">Vedi i risultati del sondaggio</a>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">Grazie per il tuo voto!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.poll-option');
+            const submitBtn = document.getElementById('submit-btn');
+            const pollContainer = document.getElementById('poll-container');
+            const thankYouMessage = document.getElementById('thank-you-message');
+            const notification = document.getElementById('notification');
+            
+            let selectedOption = null;
+            
+            // Aggiungi evento click a ogni opzione
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Rimuovi la selezione precedente
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Aggiungi la selezione alla opzione cliccata
+                    this.classList.add('selected');
+                    selectedOption = this.getAttribute('data-value');
+                    
+                    // Abilita il pulsante di invio
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // Gestisci l'invio del sondaggio
+            submitBtn.addEventListener('click', function() {
+                if (!selectedOption) return;
+                
+                // Simula l'invio dei dati al backend
+                simulateSubmit(selectedOption);
+            });
+            
+            // Funzione per simulare l'invio al backend
+            function simulateSubmit(option) {
+                // Qui andrebbe una chiamata API reale al tuo backend
+                // Per ora simuliamo con un timeout
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Invio in corso...';
+                
+                setTimeout(() => {
+                    // Mostra notifica
+                    showNotification();
+                    
+                    // Nascondi il sondaggio e mostra il messaggio di ringraziamento
+                    pollContainer.style.display = 'none';
+                    thankYouMessage.style.display = 'block';
+                    
+                    // In una implementazione reale, qui invieresti i dati al backend
+                    console.log('Risposta inviata:', option);
+                    // Esempio: fetch('https://il-tuo-backend.vercel.app/api/poll', { ... })
+                }, 1500);
+            }
+            
+            // Mostra notifica
+            function showNotification() {
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
