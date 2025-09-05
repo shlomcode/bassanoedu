@@ -3,239 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sondaggio - Crescere con il patrimonio di Bassano</title>
+    <title>Sondaggio - Patrimonio di Bassano</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
         
         .container {
-            max-width: 800px;
             width: 100%;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            height: 90vh;
+            max-height: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         
         .header {
-            background: linear-gradient(90deg, #1e3a5f 0%, #2c5c7a 100%);
-            color: white;
-            padding: 30px;
             text-align: center;
+            padding: 30px 40px;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            flex-shrink: 0;
         }
         
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-family: 'Outfit', sans-serif;
         }
         
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .poll-container {
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .options-container {
+            flex: 1;
             padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            overflow-y: auto;
         }
         
-        .poll-question {
-            font-size: 1.4rem;
-            color: #1e3a5f;
-            margin-bottom: 25px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .poll-options {
+        .option-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .poll-option {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            border: 2px solid #eaeaea;
-            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
-            background: #fafafa;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
         
-        .poll-option:hover {
-            border-color: #2c5c7a;
-            background: #f5f7fa;
-            transform: translateY(-2px);
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
         }
         
-        .poll-option.selected {
-            border-color: #1e3a5f;
-            background: #eef5fc;
-            box-shadow: 0 5px 15px rgba(28, 92, 122, 0.15);
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
         }
         
-        .option-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c5c7a 100%);
-            border-radius: 50%;
+        .option-card.selected {
+            border-color: #4facfe;
+            transform: scale(1.03);
+        }
+        
+        .icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+        
+        .option-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+        
+        .option-desc {
+            color: #718096;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .sustainability { background: linear-gradient(135deg, #f7fefd 0%, #e6fffa 100%); }
+        .innovation { background: linear-gradient(135deg, #fef7ff 0%, #faf5ff 100%); }
+        .participation { background: linear-gradient(135deg, #f7f9ff 0%, #edf2ff 100%); }
+        .identity { background: linear-gradient(135deg, #fffaf7 0%, #fff5eb 100%); }
+        
+        .action-section {
+            padding: 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-right: 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
             flex-shrink: 0;
-            font-size: 24px;
-            color: white;
         }
         
-        .option-text {
-            font-size: 1.1rem;
-            color: #2c5c7a;
-            font-weight: 500;
-        }
-        
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c5c7a 100%);
+        .vote-btn {
+            background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            padding: 16px 40px;
             font-size: 1.2rem;
             font-weight: 600;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(28, 92, 122, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #2c5c7a 0%, #3a7d99 100%);
+        .vote-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(28, 92, 122, 0.3);
+            box-shadow: 0 15px 30px -5px rgba(102, 126, 234, 0.6);
         }
         
-        .submit-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .vote-btn:active {
+            transform: translateY(0);
         }
         
-        .thank-you-message {
+        .results-section {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .results-title {
             text-align: center;
-            padding: 40px;
-            display: none;
-        }
-        
-        .thank-you-message i {
-            font-size: 60px;
-            color: #2c5c7a;
+            font-size: 1.6rem;
+            font-weight: 700;
             margin-bottom: 20px;
+            color: #2d3748;
         }
         
-        .thank-you-message h2 {
-            font-size: 2rem;
-            color: #1e3a5f;
+        .progress-container {
+            margin: 15px 0;
+        }
+        
+        .progress-item {
             margin-bottom: 15px;
         }
         
-        .thank-you-message p {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 25px;
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
         
-        .results-link {
-            display: inline-block;
-            padding: 12px 25px;
-            background: #f0f5f9;
-            color: #2c5c7a;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
+        .progress-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .progress-percent {
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .total-votes {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #718096;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .view-toggle {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .active-tab {
+            font-weight: 700;
+            text-decoration: underline;
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
         
-        .results-link:hover {
-            background: #e0ebf3;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background: #2c5c7a;
+        .tab.vote-tab {
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
             color: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
         }
         
-        .notification.show {
-            transform: translateX(0);
+        .tab.results-tab {
+            background: #edf2f7;
+            color: #4a5568;
         }
         
-        @media (max-width: 768px) {
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 900px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
-            .poll-question {
-                font-size: 1.2rem;
-            }
-            
-            .option-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-                margin-right: 15px;
-            }
-            
-            .option-text {
+            .header p {
                 font-size: 1rem;
             }
+            
+            .container {
+                height: 95vh;
+            }
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .header {
                 padding: 20px;
             }
             
-            .poll-container {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .options-container {
+                padding: 20px;
+                gap: 15px;
+            }
+            
+            .option-card {
+                padding: 15px;
+            }
+            
+            .option-title {
+                font-size: 1.1rem;
+            }
+            
+            .option-desc {
+                font-size: 0.9rem;
+            }
+            
+            .results-section {
                 padding: 20px;
             }
             
-            .poll-option {
-                padding: 15px;
-                flex-direction: column;
-                text-align: center;
+            .tab-container {
+                gap: 15px;
             }
             
-            .option-icon {
-                margin-right: 0;
-                margin-bottom: 10px;
+            .tab {
+                padding: 8px 16px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -243,111 +341,276 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Bassano Edu</h1>
-            <p>Crescere con il patrimonio di Bassano</p>
+            <h1>CRESCERE CON IL PATRIMONIO DI BASSANO</h1>
+            <p>Secondo te, quale dimensione è più decisiva per rendere il patrimonio culturale uno strumento educativo e di cittadinanza attiva?</p>
         </div>
         
-        <div class="poll-container" id="poll-container">
-            <div class="poll-question">
-                Secondo te, quale dimensione è più decisiva per rendere il patrimonio culturale uno strumento educativo e di cittadinanza attiva?
+        <div class="tab-container">
+            <div class="tab vote-tab active-tab" id="voteTab">
+                <i class="fas fa-vote-yea"></i> Vota
             </div>
-            
-            <div class="poll-options">
-                <div class="poll-option" data-value="sostenibilità">
-                    <div class="option-icon">🌱</div>
-                    <div class="option-text">Sostenibilità – cura e tutela responsabile dei beni culturali</div>
-                </div>
-                
-                <div class="poll-option" data-value="innovazione">
-                    <div class="option-icon">💡</div>
-                    <div class="option-text">Innovazione – metodologie e linguaggi nuovi per raccontare la storia</div>
-                </div>
-                
-                <div class="poll-option" data-value="partecipazione">
-                    <div class="option-icon">🤝</div>
-                    <div class="option-text">Partecipazione – collaborazione tra scuole, istituzioni e comunità</div>
-                </div>
-                
-                <div class="poll-option" data-value="identità">
-                    <div class="option-icon">🏛</div>
-                    <div class="option-text">Identità – riscoperta delle radici e valorizzazione del territorio</div>
-                </div>
+            <div class="tab results-tab" id="resultsTab">
+                <i class="fas fa-chart-bar"></i> Risultati
             </div>
-            
-            <button class="submit-btn" id="submit-btn" disabled>Invia la tua risposta</button>
         </div>
         
-        <div class="thank-you-message" id="thank-you-message">
-            <i class="fas fa-check-circle"></i>
-            <h2>Grazie per aver partecipato!</h2>
-            <p>La tua risposta è stata registrata. Il tuo contributo è importante per noi.</p>
-            <a href="#" class="results-link">Vedi i risultati del sondaggio</a>
+        <div class="tab-content">
+            <!-- Sezione di voto -->
+            <div class="content" id="voteContent">
+                <div class="options-container">
+                    <div class="option-card sustainability" data-option="sustainability">
+                        <div class="icon">🌱</div>
+                        <h3 class="option-title">Sostenibilità</h3>
+                        <p class="option-desc">Cura e tutela responsabile dei beni culturali</p>
+                    </div>
+                    
+                    <div class="option-card innovation" data-option="innovation">
+                        <div class="icon">💡</div>
+                        <h3 class="option-title">Innovazione</h3>
+                        <p class="option-desc">Metodologie e linguaggi nuovi per raccontare la storia</p>
+                    </div>
+                    
+                    <div class="option-card participation" data-option="participation">
+                        <div class="icon">🤝</div>
+                        <h3 class="option-title">Partecipazione</h3>
+                        <p class="option-desc">Collaborazione tra scuole, istituzioni e comunità</p>
+                    </div>
+                    
+                    <div class="option-card identity" data-option="identity">
+                        <div class="icon">🏛️</div>
+                        <h3 class="option-title">Identità</h3>
+                        <p class="option-desc">Riscoperta delle radici e valorizzazione del territorio</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sezione risultati (nascosta inizialmente) -->
+            <div class="results-section" id="resultsContent" style="display: none;">
+                <h2 class="results-title">Risultati del Sondaggio</h2>
+                
+                <div class="progress-container">
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-label">🌱 Sostenibilità</span>
+                            <span class="progress-percent" id="sustainability-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill sustainability" style="width: 0%; background: linear-gradient(to right, #34d399, #10b981);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-label">💡 Innovazione</span>
+                            <span class="progress-percent" id="innovation-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill innovation" style="width: 0%; background: linear-gradient(to right, #fbbf24, #f59e0b);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-label">🤝 Partecipazione</span>
+                            <span class="progress-percent" id="participation-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill participation" style="width: 0%; background: linear-gradient(to right, #60a5fa, #3b82f6);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-label">🏛️ Identità</span>
+                            <span class="progress-percent" id="identity-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill identity" style="width: 0%; background: linear-gradient(to right, #a78bfa, #8b5cf6);"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="total-votes">Totale voti: <span id="total-votes">0</span></p>
+            </div>
+        </div>
+        
+        <div class="action-section">
+            <button class="vote-btn" id="voteBtn">
+                <i class="fas fa-vote-yea"></i> VOTA ORA
+            </button>
         </div>
     </div>
-    
-    <div id="notification" class="notification">Grazie per il tuo voto!</div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const options = document.querySelectorAll('.poll-option');
-            const submitBtn = document.getElementById('submit-btn');
-            const pollContainer = document.getElementById('poll-container');
-            const thankYouMessage = document.getElementById('thank-you-message');
-            const notification = document.getElementById('notification');
+            const optionCards = document.querySelectorAll('.option-card');
+            const voteBtn = document.getElementById('voteBtn');
+            const voteTab = document.getElementById('voteTab');
+            const resultsTab = document.getElementById('resultsTab');
+            const voteContent = document.getElementById('voteContent');
+            const resultsContent = document.getElementById('resultsContent');
             
             let selectedOption = null;
+            let surveyData = {
+                sustainability: 0,
+                innovation: 0,
+                participation: 0,
+                identity: 0
+            };
             
-            // Aggiungi evento click a ogni opzione
-            options.forEach(option => {
-                option.addEventListener('click', function() {
-                    // Rimuovi la selezione precedente
-                    options.forEach(opt => opt.classList.remove('selected'));
-                    
-                    // Aggiungi la selezione alla opzione cliccata
+            // Calcola il totale dei voti
+            let totalVotes = Object.values(surveyData).reduce((acc, curr) => acc + curr, 0);
+            
+            // Inizializza i risultati
+            updateResults();
+            
+            // Aggiungi event listener per le card
+            optionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    optionCards.forEach(c => c.classList.remove('selected'));
                     this.classList.add('selected');
-                    selectedOption = this.getAttribute('data-value');
-                    
-                    // Abilita il pulsante di invio
-                    submitBtn.disabled = false;
+                    selectedOption = this.getAttribute('data-option');
                 });
             });
             
-            // Gestisci l'invio del sondaggio
-            submitBtn.addEventListener('click', function() {
-                if (!selectedOption) return;
+            // Gestisci il voto
+            voteBtn.addEventListener('click', function() {
+                if (!selectedOption) {
+                    alert('Per favore, seleziona una opzione prima di votare');
+                    return;
+                }
                 
-                // Simula l'invio dei dati al backend
-                simulateSubmit(selectedOption);
+                // Qui andrà la chiamata al backend
+                sendVoteToBackend(selectedOption);
+                
+                // Resetta la selezione
+                optionCards.forEach(c => c.classList.remove('selected'));
+                selectedOption = null;
+                
+                // Mostra i risultati dopo il voto
+                showResults();
             });
             
-            // Funzione per simulare l'invio al backend
-            function simulateSubmit(option) {
-                // Qui andrebbe una chiamata API reale al tuo backend
-                // Per ora simuliamo con un timeout
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Invio in corso...';
-                
-                setTimeout(() => {
-                    // Mostra notifica
-                    showNotification();
-                    
-                    // Nascondi il sondaggio e mostra il messaggio di ringraziamento
-                    pollContainer.style.display = 'none';
-                    thankYouMessage.style.display = 'block';
-                    
-                    // In una implementazione reale, qui invieresti i dati al backend
-                    console.log('Risposta inviata:', option);
-                    // Esempio: fetch('https://il-tuo-backend.vercel.app/api/poll', { ... })
-                }, 1500);
+            // Gestisci il cambio di tab
+            voteTab.addEventListener('click', function() {
+                showVoteTab();
+            });
+            
+            resultsTab.addEventListener('click', function() {
+                showResults();
+            });
+            
+            // Funzione per mostrare la tab di voto
+            function showVoteTab() {
+                voteContent.style.display = 'flex';
+                resultsContent.style.display = 'none';
+                voteTab.classList.add('active-tab');
+                resultsTab.classList.remove('active-tab');
+                voteTab.style.background = 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)';
+                voteTab.style.color = 'white';
+                resultsTab.style.background = '#edf2f7';
+                resultsTab.style.color = '#4a5568';
             }
             
-            // Mostra notifica
-            function showNotification() {
-                notification.classList.add('show');
+            // Funzione per mostrare i risultati
+            function showResults() {
+                voteContent.style.display = 'none';
+                resultsContent.style.display = 'flex';
+                resultsTab.classList.add('active-tab');
+                voteTab.classList.remove('active-tab');
+                resultsTab.style.background = 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)';
+                resultsTab.style.color = 'white';
+                voteTab.style.background = '#edf2f7';
+                voteTab.style.color = '#4a5568';
                 
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
+                // Aggiorna i risultati (qui simuliamo il recupero dal backend)
+                fetchResultsFromBackend();
+            }
+            
+            // Funzione per inviare il voto al backend (DA IMPLEMENTARE)
+            function sendVoteToBackend(option) {
+                // ESEMPIO: invio dati al backend
+                /*
+                fetch('https://tuo-backend.com/api/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ option: option })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Aggiorna l'interfaccia con i nuovi risultati
+                    updateResultsFromData(data);
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    alert('Si è verificato un errore durante il voto. Riprova più tardi.');
+                });
+                */
+                
+                // Per ora simuliamo un successo
+                alert('Grazie per il tuo voto! Il tuo contributo è importante per comprendere come valorizzare al meglio il patrimonio culturale di Bassano.');
+                
+                // Simuliamo l'aggiornamento dei dati
+                surveyData[option]++;
+                totalVotes++;
+                updateResults();
+            }
+            
+            // Funzione per recuperare i risultati dal backend (DA IMPLEMENTARE)
+            function fetchResultsFromBackend() {
+                // ESEMPIO: recupero dati dal backend
+                /*
+                fetch('https://tuo-backend.com/api/results')
+                .then(response => response.json())
+                .then(data => {
+                    updateResultsFromData(data);
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    alert('Si è verificato un errore nel recupero dei risultati.');
+                });
+                */
+                
+                // Per ora usiamo i dati locali
+                updateResults();
+            }
+            
+            // Aggiorna i risultati dall'oggetto dati
+            function updateResultsFromData(data) {
+                surveyData = data.results;
+                totalVotes = data.totalVotes;
+                updateResults();
+            }
+            
+            // Aggiorna i risultati nell'interfaccia
+            function updateResults() {
+                document.getElementById('sustainability-percent').textContent = 
+                    calculatePercentage(surveyData.sustainability) + '%';
+                document.getElementById('innovation-percent').textContent = 
+                    calculatePercentage(surveyData.innovation) + '%';
+                document.getElementById('participation-percent').textContent = 
+                    calculatePercentage(surveyData.participation) + '%';
+                document.getElementById('identity-percent').textContent = 
+                    calculatePercentage(surveyData.identity) + '%';
+                
+                document.querySelector('.progress-fill.sustainability').style.width = 
+                    calculatePercentage(surveyData.sustainability) + '%';
+                document.querySelector('.progress-fill.innovation').style.width = 
+                    calculatePercentage(surveyData.innovation) + '%';
+                document.querySelector('.progress-fill.participation').style.width = 
+                    calculatePercentage(surveyData.participation) + '%';
+                document.querySelector('.progress-fill.identity').style.width = 
+                    calculatePercentage(surveyData.identity) + '%';
+                
+                document.getElementById('total-votes').textContent = totalVotes;
+            }
+            
+            // Calcola la percentuale
+            function calculatePercentage(value) {
+                if (totalVotes === 0) return 0;
+                return Math.round((value / totalVotes) * 100);
             }
         });
     </script>
